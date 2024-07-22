@@ -24,7 +24,7 @@ async function SearchPage({ searchParams }: Props) {
       </div>
       <div className="max-w-screen-xl mx-auto px-6">
         <div className="py-16">
-          <h3>Search Results for "{searchParams.query}"</h3>
+          <h3>Search Results for &quot;{searchParams.query}&quot;</h3>
         </div>
         <div>
           <div className="items-center py-8">

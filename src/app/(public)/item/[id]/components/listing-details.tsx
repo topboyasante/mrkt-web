@@ -178,7 +178,7 @@ function ListingDetails({ listing, author }: Props) {
                   Thoroughly inspect the property to ensure it meets your needs
                 </li>
                 <li>
-                  Refrain from making advance payments if you can't move in
+                  Refrain from making advance payments if you can&apos;t move in
                   right away
                 </li>
               </ul>

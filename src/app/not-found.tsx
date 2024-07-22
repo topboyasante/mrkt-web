@@ -12,7 +12,7 @@ function NotFound() {
         className="w-20 h-20 rounded-md"
       />
       <div className="flex flex-col justify-center items-center">
-        <h3>The page you're looking for does not exist.</h3>
+        <h3>The page you&apos;re looking for does not exist.</h3>
         <BackButton />
       </div>
     </div>
