@@ -1,5 +1,5 @@
 import { GetFeaturedListings, GetListings } from "@/services/listings.services";
-import React from "react";
+import React, { Suspense } from "react";
 import FeaturedListings from "./components/featured-listings";
 import Listings from "./components/listings";
 import SearchBar from "@/components/ui/search-bar";
@@ -17,7 +17,9 @@ async function Home() {
           <h1>Welcome to the MRKT.</h1>
           <p className="text-neutral-500 mt-2">What do you need?</p>
           <br />
-          <SearchBar />
+          <Suspense>
+            <SearchBar />
+          </Suspense>
         </div>
       </div>
       <div className="max-w-screen-xl mx-auto px-6">
