@@ -45,7 +45,7 @@ export default function ResetPasswordForm({ reset_email }: Props) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmittingForm(true);
-    ResetPassword({
+    await ResetPassword({
       email: reset_email,
       new_password: values.password,
       auth_token: values.auth_token,

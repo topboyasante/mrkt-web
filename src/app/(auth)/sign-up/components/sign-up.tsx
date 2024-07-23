@@ -58,7 +58,7 @@ function SignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmittingForm(true);
     setError("");
-    SignUp(values)
+    await SignUp(values)
       .then(() => {
         setIsSubmittingForm(false);
         router.push(`/activate-account?email=${values.email}`);

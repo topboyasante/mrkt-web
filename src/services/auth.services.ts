@@ -50,6 +50,26 @@ async function ActivateAccount(email: string, auth_token: number) {
     });
 }
 
+async function ResendActivationCode(email: string) {
+  await fetch(`${process.env.API_URL}/auth/resend-token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(`${errorData.error}`);
+      }
+      return res;
+    })
+    .catch((err) => {
+      throw new Error(`${err.message}`);
+    });
+}
+
 async function RefreshAccessToken(token: JWT) {
   try {
     const response = await fetch(`${process.env.API_URL}/auth/refresh-token`, {
@@ -134,4 +154,5 @@ export {
   RefreshAccessToken,
   ForgotPassword,
   ResetPassword,
+  ResendActivationCode,
 };
