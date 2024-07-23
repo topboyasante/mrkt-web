@@ -134,7 +134,7 @@ function ActivateAccountForm({ ...props }: Props) {
                 {isSubmittingForm ? <Loader /> : <div>Submit</div>}
               </Button>
               <div className="my-3 flex items-center gap-1">
-                <p>Didn't receive the code? </p>
+                <p>Didn&apos;t receive the code? </p>
                 <Button
                   disabled={!canSendCode}
                   type="button"
