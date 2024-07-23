@@ -157,7 +157,7 @@ function ActivateAccountForm({ ...props }: Props) {
                 .
               </p>
               <p className="text-sm text-neutral-600 mt-2">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <span className="font-semibold text-primary">
                   <Link href={`sign-up`} className="hover:underline">
                     Sign Up
