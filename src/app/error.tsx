@@ -12,7 +12,7 @@ function NotFound() {
         height={500}
         className="w-20 h-20 rounded-md"
       />
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center text-center">
         <h3>Ow, Snap!</h3>
         <p className="text-neutral-500">
           You&apos;re here because something went wrong. Would you like to head
