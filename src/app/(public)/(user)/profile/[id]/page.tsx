@@ -1,10 +1,12 @@
 import ListingCard from "@/app/(public)/components/listing-card";
 import { Button } from "@/components/ui/button";
+import { authOptions } from "@/lib/auth";
 import { GetListingsByUserID } from "@/services/listings.services";
 import { GetUserById } from "@/services/user.services";
 import { IListingCard } from "@/types";
 import { getTimeAgo } from "@/utils/time";
 import Avatar from "boring-avatars";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 import React from "react";
 
@@ -15,9 +17,10 @@ type Props = {
 };
 
 async function ProfilePage({ params }: Props) {
-  const [listings, user] = await Promise.all([
+  const [listings, user, session] = await Promise.all([
     GetListingsByUserID(params.id),
     GetUserById(params.id),
+    getServerSession(authOptions),
   ]);
 
   return (
@@ -60,15 +63,17 @@ async function ProfilePage({ params }: Props) {
                 <div className="text-center">
                   <h3>MRKT</h3>
                   <p className="text-neutral-500">No listings avaliable</p>
-                  <Link href={`/new`}>
-                    <Button
-                      variant={"default"}
-                      size={"sm"}
-                      className="items-center gap-2"
-                    >
-                      Sell Something
-                    </Button>
-                  </Link>
+                  {session?.user.id === user.data.id && (
+                    <Link href={`/new`}>
+                      <Button
+                        variant={"default"}
+                        size={"sm"}
+                        className="items-center gap-2"
+                      >
+                        Sell Something
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
             ) : (
