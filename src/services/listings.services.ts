@@ -91,22 +91,6 @@ async function GetListing(id: string) {
   }
 }
 
-async function GetListingAuthor(id: string) {
-  try {
-    const res = await fetch(`${process.env.API_URL}/listings/${id}/author`, {
-      next: { revalidate: 0 },
-    });
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    throw error;
-  }
-}
 
 async function GetFeaturedListings() {
   try {
@@ -174,7 +158,6 @@ export {
   GetListing,
   GetListings,
   GetFeaturedListings,
-  GetListingAuthor,
   CreateListing,
   GetListingsByUserID,
   DeleteListing,

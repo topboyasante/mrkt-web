@@ -39,12 +39,10 @@ type Props = {
     id: string;
   };
   author: {
-    data: {
       first_name: string;
       last_name: string;
       phone_number: string;
       id: string;
-    };
   };
 };
 
@@ -131,7 +129,7 @@ function ListingDetails({ listing, author }: Props) {
                   <div className="flex items-center gap-2">
                     <Avatar
                       size={45}
-                      name={author.data.first_name}
+                      name={author.first_name}
                       variant="marble"
                       colors={[
                         "#92A1C6",
@@ -142,17 +140,17 @@ function ListingDetails({ listing, author }: Props) {
                       ]}
                     />
                     <p>
-                      {author.data.first_name} {author.data.last_name}
+                      {author.first_name} {author.last_name}
                     </p>
                   </div>
                 </div>
-                <Link href={`tel:${author.data.phone_number}`} target="_blank">
+                <Link href={`tel:${author.phone_number}`} target="_blank">
                   <Button className="w-full mb-2">
-                    Call {author.data.first_name}
+                    Call {author.first_name}
                   </Button>
                 </Link>
                 <Link
-                  href={`https://wa.me/${author.data.phone_number}?text=I'm%20interested%20in%20your%20${listing.title}`}
+                  href={`https://wa.me/${author.phone_number}?text=I'm%20interested%20in%20your%20${listing.title}`}
                   target="_blank"
                 >
                   <Button className="w-full gap-2">
@@ -164,7 +162,7 @@ function ListingDetails({ listing, author }: Props) {
             <br />
             <div className="shadow p-5 rounded-md">
               <h5>Seller Profile</h5>
-              <Link href={`/profile/${author.data.id}`}>
+              <Link href={`/profile/${author.id}`}>
                 <Button className="w-full my-2">View Seller Profile</Button>
               </Link>
             </div>

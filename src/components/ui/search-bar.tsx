@@ -27,14 +27,14 @@ export default function SearchBar() {
         <Input
           type="search"
           placeholder="Search..."
-          className="w-full rounded-lg bg-background text-muted-foreground pl-8 md:w-[200px] lg:w-[320px]"
+          className="w-full rounded-lg bg-background text-muted-foreground pl-8 md:w-[250px] lg:w-[380px]"
           onChange={(e) => {
             setSearchTerm(e.target.value);
           }}
           value={searchTerm}
         />
       </div>
-      <Button onClick={handleSearchClick} variant={`secondary`}>
+      <Button onClick={handleSearchClick} variant={`secondary`} className="px-6">
         Search
       </Button>
     </div>

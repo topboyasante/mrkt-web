@@ -20,7 +20,7 @@ function Navbar() {
                   size={"sm"}
                   className="rounded-full items-center gap-2"
                 >
-                  Sell Something
+                  Start Selling
                 </Button>
               </Link>
               <UserProfileDropdown />
@@ -30,16 +30,13 @@ function Navbar() {
               <Link href={`/sign-in`} className="hover:underline">
                 Log In
               </Link>
-              <Link href={`/sign-up`} className="hover:underline">
-                Register
-              </Link>
-              <Link href={`/new`}>
+              <Link href={`/sign-up`}>
                 <Button
                   variant={"secondary"}
                   size={"sm"}
                   className="rounded-full items-center gap-2"
                 >
-                  Sell Something
+                  Start Selling
                 </Button>
               </Link>
             </div>

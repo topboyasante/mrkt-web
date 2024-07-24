@@ -25,7 +25,7 @@ type ChangePasswordParams = {
 async function ChangePassword(data: ChangePasswordParams, accessToken: string) {
   try {
     const res = await fetch(`${process.env.API_URL}/user/change-password`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",

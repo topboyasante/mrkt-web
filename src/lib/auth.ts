@@ -1,4 +1,5 @@
 import { RefreshAccessToken } from "@/services/auth.services";
+import { IUsr } from "@/types";
 import { NextAuthOptions, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -17,33 +18,34 @@ export const authOptions: NextAuthOptions = {
 
         const { email, password } = credentials;
 
-        const user = await fetch(`${process.env.API_URL}/auth/sign-in`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        })
-          .then(async (res) => {
-            if (!res.ok) {
-              const errorData = await res.json();
-              throw new Error(errorData.error);
-            }
-            const data = await res.json();
-            return {
-              id: data.data.id,
-              first_name: data.data.first_name,
-              email: data.data.email,
-              access_token: data.data.access_token,
-              refresh_token: data.data.refresh_token,
-              expiresIn: data.data.expires_in,
-            };
-          })
-          .catch((err) => {
-            throw new Error(err.message);
+        try {
+          const response = await fetch(`${process.env.API_URL}/auth/sign-in`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
           });
 
-        return user;
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error);
+          }
+
+          const data = await response.json();
+          const user: IUsr = {
+            id: data.data.id,
+            first_name: data.data.first_name,
+            email: data.data.email,
+            access_token: data.data.access_token,
+            refresh_token: data.data.refresh_token,
+            expires_in: data.data.expires_in,
+          };
+
+          return user;
+        } catch (err: any) {
+          throw new Error(err.message);
+        }
       },
     }),
   ],
@@ -59,7 +61,7 @@ export const authOptions: NextAuthOptions = {
       if (account && user) {
         return {
           accessToken: user.access_token,
-          accessTokenExpires: user.expires_in,
+          accessTokenExpires: Date.now() + user.expires_in * 1000,
           refreshToken: user.refresh_token,
           user,
         };
