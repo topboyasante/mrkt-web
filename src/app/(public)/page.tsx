@@ -10,6 +10,7 @@ async function Home() {
     GetFeaturedListings(),
   ]);
 
+
   return (
     <div>
       <div className="bg-primary text-primary-foreground">
@@ -24,9 +25,9 @@ async function Home() {
       </div>
       <div className="max-w-screen-xl mx-auto px-6">
         <br />
-        <FeaturedListings data={featuredListings.data} />
+        <FeaturedListings data={featuredListings?.data} />
         <br />
-        <Listings data={listings.data} />
+        <Listings data={listings?.data} />
       </div>
     </div>
   );

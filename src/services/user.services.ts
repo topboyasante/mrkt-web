@@ -1,19 +1,22 @@
 "use server";
 
-async function GetUserById(id: string) {
+import { UserResponse } from "@/types";
+
+async function GetUserById(id: string): Promise<UserResponse | null> {
   try {
     const res = await fetch(`${process.env.API_URL}/user/${id}`, {
       next: { revalidate: 0 },
     });
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
+      console.error(`Failed to fetch data: ${res.status} ${res.statusText}`);
+      return null;
     }
 
     return await res.json();
   } catch (error) {
-    console.error("Error fetching products:", error);
-    throw error;
+    console.error("Error fetching user:", error);
+    return null;
   }
 }
 

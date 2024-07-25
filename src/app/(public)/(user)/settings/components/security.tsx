@@ -50,7 +50,6 @@ function Security() {
       });
       toast.success("Password has been changed. Please log in.")
     } catch (err) {
-        console.log(err)
       toast.error(`${err}`);
     } finally {
       setIsSubmittingForm(false);

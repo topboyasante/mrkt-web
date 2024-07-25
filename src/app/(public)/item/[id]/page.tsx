@@ -10,7 +10,7 @@ type Props = {
 async function ListingDetailsPage({ params }: Props) {
   const [listing] = await Promise.all([GetListing(params.id)]);
 
-  return <ListingDetails listing={listing.data} author={listing.data.user} />;
+  return <ListingDetails listing={listing} />;
 }
 
 export default ListingDetailsPage;

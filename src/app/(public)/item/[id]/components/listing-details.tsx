@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/ui/loader";
 import { DeleteListing } from "@/services/listings.services";
+import { SingleResponse } from "@/types";
 import { getTimeAgo } from "@/utils/time";
 import Avatar from "boring-avatars";
 import DOMPurify from "isomorphic-dompurify";
@@ -26,49 +27,56 @@ import { SiWhatsapp } from "react-icons/si";
 import { toast } from "sonner";
 
 type Props = {
-  listing: {
-    image_url: string;
-    title: string;
-    address: string;
-    city: string;
-    country: string;
-    created_at: string;
-    description: string;
-    price: number;
-    user_id: string;
-    id: string;
-  };
-  author: {
-      first_name: string;
-      last_name: string;
-      phone_number: string;
-      calling_code: string;
-      id: string;
-  };
+  listing: SingleResponse | null | undefined;
 };
 
-function ListingDetails({ listing, author }: Props) {
+function ListingDetails({ listing }: Props) {
   const [overlay, setOverlay] = useState(false);
   const router = useRouter();
   const session = useSession();
 
   async function handleDeleteListing() {
+    if (!listing?.data?.id || !session.data?.user.access_token) return;
+
     try {
       setOverlay(true);
-      await DeleteListing(
-        listing.id,
-        session.data?.user.access_token as string
-      );
+      await DeleteListing(listing.data.id, session.data.user.access_token);
       toast("Listing deleted successfully!");
       router.push("/");
     } catch (error) {
-      setOverlay(false);
       toast("Error deleting listing.");
       console.error("Error deleting listing:", error);
     } finally {
       setOverlay(false);
     }
   }
+
+  if (!listing) {
+    return (
+      <div className="min-h-screen col-span-4 flex justify-center items-center">
+        <div className="text-center">
+          <h3>MRKT</h3>
+          <p className="text-neutral-500">
+            An error occured while loading this listing. Please try again.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const { data } = listing;
+  const {
+    image_url,
+    title,
+    address,
+    city,
+    country,
+    created_at,
+    description,
+    price,
+    user,
+    user_id,
+  } = data;
 
   return (
     <>
@@ -83,8 +91,8 @@ function ListingDetails({ listing, author }: Props) {
           <div className="col-span-6 lg:col-span-4">
             <div className="relative">
               <Image
-                src={listing.image_url}
-                alt={listing.title}
+                src={image_url || "/default-image.jpg"} // Fallback image if undefined
+                alt={title || "Listing Image"}
                 width={1920}
                 height={720}
                 className="w-full rounded-md h-[500px] lg:h-[650px] object-cover"
@@ -93,23 +101,24 @@ function ListingDetails({ listing, author }: Props) {
             </div>
             <br />
             <div className="shadow p-5 rounded-md">
-              <h3>{listing.title}</h3>
+              <h3>{title || "No Title"}</h3>
               <div className="text-sm flex items-center gap-2 my-2 text-neutral-500">
                 <MapPin size={15} />
                 <p>
-                  {listing.address}, {listing.city}, {listing.country}
+                  {address || "No Address"}, {city || "No City"},{" "}
+                  {country || "No Country"}
                 </p>
               </div>
               <p className="text-sm flex items-center gap-2 text-neutral-500">
                 <Clock size={15} />
-                <span>Posted {getTimeAgo(listing.created_at)}</span>
+                <span>Posted {getTimeAgo(created_at)}</span>
               </p>
             </div>
             <br />
             <div className="shadow p-5 rounded-md">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(listing.description),
+                  __html: DOMPurify.sanitize(description || "No Description"),
                 }}
               ></div>
             </div>
@@ -121,7 +130,7 @@ function ListingDetails({ listing, author }: Props) {
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "GHS",
-                }).format(listing.price)}
+                }).format(price || 0)}
               </h3>
               <hr className="my-2" />
               <div>
@@ -130,7 +139,7 @@ function ListingDetails({ listing, author }: Props) {
                   <div className="flex items-center gap-2">
                     <Avatar
                       size={45}
-                      name={author.first_name}
+                      name={user?.first_name || "Unknown"}
                       variant="marble"
                       colors={[
                         "#92A1C6",
@@ -141,17 +150,20 @@ function ListingDetails({ listing, author }: Props) {
                       ]}
                     />
                     <p>
-                      {author.first_name} {author.last_name}
+                      {user?.first_name || "Unknown"}{" "}
+                      {user?.last_name || "User"}
                     </p>
                   </div>
                 </div>
-                <Link href={`tel:${author.phone_number}`} target="_blank">
+                <Link href={`tel:${user?.phone_number || ""}`} target="_blank">
                   <Button className="w-full mb-2">
-                    Call {author.first_name}
+                    Call {user?.first_name || "Seller"}
                   </Button>
                 </Link>
                 <Link
-                  href={`https://wa.me/${author.calling_code+author.phone_number}?text=I'm%20interested%20in%20your%20${listing.title}`}
+                  href={`https://wa.me/${
+                    user?.calling_code || "" + (user?.phone_number || "")
+                  }?text=I'm%20interested%20in%20your%20${title || "listing"}`}
                   target="_blank"
                 >
                   <Button className="w-full gap-2">
@@ -163,7 +175,7 @@ function ListingDetails({ listing, author }: Props) {
             <br />
             <div className="shadow p-5 rounded-md">
               <h5>Seller Profile</h5>
-              <Link href={`/profile/${author.id}`}>
+              <Link href={`/profile/${user?.id}`}>
                 <Button className="w-full my-2">View Seller Profile</Button>
               </Link>
             </div>
@@ -183,11 +195,11 @@ function ListingDetails({ listing, author }: Props) {
               </ul>
             </div>
             <br />
-            {session?.data?.user.id === listing.user_id && (
+            {session?.data?.user.id === user_id && (
               <div className="shadow p-5 rounded-md">
                 <div>
                   <p>This listing was created by you.</p>
-                  <Link href={`/item/${listing.id}/edit`}>
+                  <Link href={`/item/${listing.data.id}/edit`}>
                     <Button className="w-full my-2" variant={"outline"}>
                       Edit this Listing
                     </Button>
