@@ -12,6 +12,21 @@ type Props = {
 
 async function SearchPage({ searchParams }: Props) {
   const listing = await SearchListing(searchParams.query);
+
+  if (listing === null || undefined) {
+    return (
+      <div className="min-h-screen col-span-4 flex justify-center items-center">
+        <div className="text-center">
+          <h3>MRKT</h3>
+          <p className="text-neutral-500">
+            An error occured while loading this seller&apos; profile. Please try
+            again.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="bg-primary text-primary-foreground">
