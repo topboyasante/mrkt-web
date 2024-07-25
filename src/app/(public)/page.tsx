@@ -3,13 +3,13 @@ import React, { Suspense } from "react";
 import FeaturedListings from "./components/featured-listings";
 import Listings from "./components/listings";
 import SearchBar from "@/components/ui/search-bar";
+import { notFound } from "next/navigation";
 
 async function Home() {
   const [listings, featuredListings] = await Promise.all([
     GetListings(),
     GetFeaturedListings(),
   ]);
-
 
   return (
     <div>

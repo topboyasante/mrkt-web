@@ -2,7 +2,7 @@
 import BackButton from "@/components/ui/back-button";
 import Image from "next/image";
 
-function NotFound() {
+function Error() {
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-3">
       <Image
@@ -24,4 +24,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default Error;

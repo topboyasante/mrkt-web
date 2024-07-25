@@ -27,42 +27,13 @@ import { SiWhatsapp } from "react-icons/si";
 import { toast } from "sonner";
 
 type Props = {
-  listing: SingleResponse | null | undefined;
+  listing: SingleResponse;
 };
 
 function ListingDetails({ listing }: Props) {
   const [overlay, setOverlay] = useState(false);
   const router = useRouter();
   const session = useSession();
-
-  async function handleDeleteListing() {
-    if (!listing?.data?.id || !session.data?.user.access_token) return;
-
-    try {
-      setOverlay(true);
-      await DeleteListing(listing.data.id, session.data.user.access_token);
-      toast("Listing deleted successfully!");
-      router.push("/");
-    } catch (error) {
-      toast("Error deleting listing.");
-      console.error("Error deleting listing:", error);
-    } finally {
-      setOverlay(false);
-    }
-  }
-
-  if (!listing) {
-    return (
-      <div className="min-h-screen col-span-4 flex justify-center items-center">
-        <div className="text-center">
-          <h3>MRKT</h3>
-          <p className="text-neutral-500">
-            An error occured while loading this listing. Please try again.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   const { data } = listing;
   const {
@@ -78,6 +49,23 @@ function ListingDetails({ listing }: Props) {
     user_id,
   } = data;
 
+  async function handleDeleteListing() {
+    try {
+      setOverlay(true);
+      await DeleteListing(
+        listing.data.id,
+        session.data?.user.access_token as string
+      );
+      toast("Listing deleted successfully!");
+      router.push("/");
+    } catch (error) {
+      toast("Error deleting listing.");
+      console.error("Error deleting listing:", error);
+    } finally {
+      setOverlay(false);
+    }
+  }
+
   return (
     <>
       {overlay && (
@@ -91,8 +79,8 @@ function ListingDetails({ listing }: Props) {
           <div className="col-span-6 lg:col-span-4">
             <div className="relative">
               <Image
-                src={image_url || "/default-image.jpg"} // Fallback image if undefined
-                alt={title || "Listing Image"}
+                src={image_url}
+                alt={title}
                 width={1920}
                 height={720}
                 className="w-full rounded-md h-[500px] lg:h-[650px] object-cover"
@@ -101,12 +89,11 @@ function ListingDetails({ listing }: Props) {
             </div>
             <br />
             <div className="shadow p-5 rounded-md">
-              <h3>{title || "No Title"}</h3>
+              <h3>{title}</h3>
               <div className="text-sm flex items-center gap-2 my-2 text-neutral-500">
                 <MapPin size={15} />
                 <p>
-                  {address || "No Address"}, {city || "No City"},{" "}
-                  {country || "No Country"}
+                  {address}, {city}, {country}
                 </p>
               </div>
               <p className="text-sm flex items-center gap-2 text-neutral-500">
@@ -118,7 +105,7 @@ function ListingDetails({ listing }: Props) {
             <div className="shadow p-5 rounded-md">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(description || "No Description"),
+                  __html: DOMPurify.sanitize(description),
                 }}
               ></div>
             </div>
@@ -130,7 +117,7 @@ function ListingDetails({ listing }: Props) {
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "GHS",
-                }).format(price || 0)}
+                }).format(price)}
               </h3>
               <hr className="my-2" />
               <div>
@@ -139,7 +126,7 @@ function ListingDetails({ listing }: Props) {
                   <div className="flex items-center gap-2">
                     <Avatar
                       size={45}
-                      name={user?.first_name || "Unknown"}
+                      name={user.first_name}
                       variant="marble"
                       colors={[
                         "#92A1C6",
@@ -150,20 +137,19 @@ function ListingDetails({ listing }: Props) {
                       ]}
                     />
                     <p>
-                      {user?.first_name || "Unknown"}{" "}
-                      {user?.last_name || "User"}
+                      {user.first_name} {user.last_name}
                     </p>
                   </div>
                 </div>
-                <Link href={`tel:${user?.phone_number || ""}`} target="_blank">
+                <Link href={`tel:${user.phone_number}`} target="_blank">
                   <Button className="w-full mb-2">
-                    Call {user?.first_name || "Seller"}
+                    Call {user.first_name}
                   </Button>
                 </Link>
                 <Link
                   href={`https://wa.me/${
-                    user?.calling_code || "" + (user?.phone_number || "")
-                  }?text=I'm%20interested%20in%20your%20${title || "listing"}`}
+                    user?.calling_code + user.phone_number
+                  }?text=I'm%20interested%20in%20your%20${title}`}
                   target="_blank"
                 >
                   <Button className="w-full gap-2">
@@ -175,7 +161,7 @@ function ListingDetails({ listing }: Props) {
             <br />
             <div className="shadow p-5 rounded-md">
               <h5>Seller Profile</h5>
-              <Link href={`/profile/${user?.id}`}>
+              <Link href={`/profile/${user.id}`}>
                 <Button className="w-full my-2">View Seller Profile</Button>
               </Link>
             </div>
