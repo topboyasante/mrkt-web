@@ -48,8 +48,8 @@ const formSchema = z.object({
   phone_number: z.string().min(1, {
     message: "Provide a valid phone number",
   }),
-  password: z.string().min(1, {
-    message: "Provide a valid password",
+  password: z.string().min(8, {
+    message: "Password should be at least 8 characters",
   }),
 });
 
