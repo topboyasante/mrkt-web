@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import CountrySelect from "@/components/ui/country-select";
 import {
   Form,
   FormControl,
@@ -13,12 +14,11 @@ import Loader from "@/components/ui/loader";
 import { SignUp } from "@/services/auth.services";
 import { formatError } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Eye, EyeIcon, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -31,6 +31,20 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Provide a valid email",
   }),
+  country: z
+    .object({
+      country_code: z
+        .string()
+        .min(1, { message: "Provide a valid country code" })
+        .max(2, { message: "Country code must be 2 characters" }),
+      calling_code: z
+        .string()
+        .min(1, { message: "Provide a valid calling code" })
+        .max(4, { message: "Calling code must be up to 4 characters" }),
+    })
+    .refine((data) => data.country_code && data.calling_code, {
+      message: "Provide a valid country",
+    }),
   phone_number: z.string().min(1, {
     message: "Provide a valid phone number",
   }),
@@ -42,6 +56,7 @@ const formSchema = z.object({
 function SignUpForm() {
   const router = useRouter();
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,8 +64,12 @@ function SignUpForm() {
     defaultValues: {
       first_name: "",
       last_name: "",
-      phone_number: "",
       email: "",
+      country: {
+        country_code: "",
+        calling_code: "",
+      },
+      phone_number: "",
       password: "",
     },
   });
@@ -58,7 +77,16 @@ function SignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmittingForm(true);
     setError("");
-    await SignUp(values)
+    const payload = {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      email: values.email,
+      password: values.password,
+      phone_number: values.phone_number,
+      country_code: values.country.country_code,
+      calling_code: values.country.calling_code,
+    };
+    await SignUp(payload)
       .then(() => {
         setIsSubmittingForm(false);
         router.push(`/activate-account?email=${values.email}`);
@@ -68,6 +96,7 @@ function SignUpForm() {
         setIsSubmittingForm(false);
       });
   }
+
   return (
     <div className="w-full bg-white px-5 py-8 rounded-xl">
       <div>
@@ -144,6 +173,23 @@ function SignUpForm() {
             />
             <FormField
               control={form.control}
+              name="country"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-primary">Country</FormLabel>
+                  <FormControl>
+                    <CountrySelect
+                      onChange={(selectedOption) => {
+                        field.onChange(selectedOption);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="phone_number"
               render={({ field }) => (
                 <FormItem>
@@ -167,12 +213,23 @@ function SignUpForm() {
                 <FormItem>
                   <FormLabel className="text-primary">Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      {...field}
-                      autoFocus
-                      disabled={isSubmittingForm}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        {...field}
+                        autoFocus
+                        disabled={isSubmittingForm}
+                        className="pr-10" // Add padding to the right for the button
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 px-3 py-2 text-sm"
+                        disabled={isSubmittingForm}
+                      >
+                        {showPassword ? <EyeOff /> : <Eye />}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -7,6 +7,8 @@ function formatError(input: string): string {
     "account is not activated": "Please activate your account.",
     "invalid email": "The email you provided is invalid.",
     "user with provided email exists": "A user with the provided email exists.",
+    "user with provided phone_number exists":
+      "A user with the provided phone_number exists.",
     "failed to read request body":
       "There was an issue processing your request.",
     "unauthorized request": "You are not authorized to perform this action.",

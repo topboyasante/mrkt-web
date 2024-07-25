@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import Loader from "@/components/ui/loader";
 import { formatError } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -32,6 +32,7 @@ const formSchema = z.object({
 function SignInForm() {
   const router = useRouter();
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -101,11 +102,23 @@ function SignInForm() {
                 <FormItem>
                   <FormLabel className="text-primary">Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      {...field}
-                      disabled={isSubmittingForm}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        {...field}
+                        autoFocus
+                        disabled={isSubmittingForm}
+                        className="pr-10" // Add padding to the right for the button
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 px-3 py-2 text-sm"
+                        disabled={isSubmittingForm}
+                      >
+                        {showPassword ? <EyeOff /> : <Eye />}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

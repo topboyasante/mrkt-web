@@ -42,6 +42,7 @@ type Props = {
       first_name: string;
       last_name: string;
       phone_number: string;
+      calling_code: string;
       id: string;
   };
 };
@@ -150,7 +151,7 @@ function ListingDetails({ listing, author }: Props) {
                   </Button>
                 </Link>
                 <Link
-                  href={`https://wa.me/${author.phone_number}?text=I'm%20interested%20in%20your%20${listing.title}`}
+                  href={`https://wa.me/${author.calling_code+author.phone_number}?text=I'm%20interested%20in%20your%20${listing.title}`}
                   target="_blank"
                 >
                   <Button className="w-full gap-2">
