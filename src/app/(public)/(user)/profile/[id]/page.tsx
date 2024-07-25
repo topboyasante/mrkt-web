@@ -23,8 +23,6 @@ async function ProfilePage({ params }: Props) {
     getServerSession(authOptions),
   ]);
 
-  console.log(user);
-
   const userListings = listings?.data || null;
   const userData = user?.data || null;
 
