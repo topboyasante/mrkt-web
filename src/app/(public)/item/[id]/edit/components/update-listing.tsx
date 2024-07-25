@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Loader from "@/components/ui/loader";
 import TipTap from "@/components/ui/rich-text";
-import { CreateListing, UpdateListing } from "@/services/listings.services";
+import { UpdateListing } from "@/services/listings.services";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -47,43 +47,33 @@ const formSchema = z.object({
 });
 
 type FormProps = {
-  user_id: string;
-  listing_id: string;
-  title: string;
-  description: string;
-  price: string;
-  address: string;
-  city: string;
-  country: string;
-  image: string;
+  user_id: string | null | undefined;
+  listing_id: string | null | undefined;
+  title: string | null | undefined;
+  description: string | null | undefined;
+  price: number | null | undefined;
+  address: string | null | undefined;
+  city: string | null | undefined;
+  country: string | null | undefined;
+  image: string | null | undefined;
 };
 
-function UpdateListingForm({
-  user_id,
-  title,
-  description,
-  price,
-  address,
-  city,
-  country,
-  image,
-  listing_id,
-}: FormProps) {
+function UpdateListingForm({ ...props }: FormProps) {
   const router = useRouter();
   const session = useSession();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
-  const [preview, setPreview] = useState<string>(image);
+  const [preview, setPreview] = useState<string>(props.image || "");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title,
-      description,
-      price: String(price),
-      address,
-      city,
-      country,
+      title: props.title || "",
+      description: props.description || "",
+      price: String(props.price),
+      address: props.address || "",
+      city: props.city || "",
+      country: props.country || "",
     },
   });
 
@@ -91,7 +81,7 @@ function UpdateListingForm({
     setIsSubmittingForm(true);
 
     const formData = new FormData();
-    formData.append("user_id", user_id);
+    formData.append("user_id", props.user_id as string);
     formData.append("title", values.title);
     formData.append("description", values.description);
     formData.append("price", values.price);
@@ -105,7 +95,7 @@ function UpdateListingForm({
 
     try {
       await UpdateListing(
-        listing_id,
+        props.listing_id as string,
         formData,
         session.data?.user.access_token as string
       );
@@ -136,6 +126,19 @@ function UpdateListingForm({
     } else {
       return;
     }
+  }
+
+  if (props === null || undefined) {
+    return (
+      <div className="min-h-screen col-span-4 flex justify-center items-center">
+        <div className="text-center">
+          <h3>MRKT</h3>
+          <p className="text-neutral-500">
+            An error occured while loading this page. Please try again.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -199,7 +202,7 @@ function UpdateListingForm({
                 <FormControl>
                   <TipTap
                     onChange={field.onChange}
-                    initialContent={description}
+                    initialContent={props.description || ""}
                   />
                 </FormControl>
                 <FormMessage />

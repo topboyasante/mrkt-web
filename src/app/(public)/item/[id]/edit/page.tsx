@@ -19,14 +19,14 @@ async function EditListingPage({ params }: Props) {
     <div className="max-w-screen-md mx-auto px-6">
       <UpdateListingForm
         user_id={session?.user.id as string}
-        listing_id={listing.data.id}
-        title={listing.data.title}
-        description={listing.data.description}
-        price={listing.data.price}
-        address={listing.data.address}
-        city={listing.data.city}
-        country={listing.data.country}
-        image={listing.data.image_url}
+        listing_id={listing?.data.id}
+        title={listing?.data.title}
+        description={listing?.data.description}
+        price={listing?.data.price}
+        address={listing?.data.address}
+        city={listing?.data.city}
+        country={listing?.data.country}
+        image={listing?.data.image_url}
       />
     </div>
   );
