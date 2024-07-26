@@ -23,7 +23,7 @@ async function ProfilePage({ params }: Props) {
     getServerSession(authOptions),
   ]);
 
-  if (listings?.data || user?.data == null) {
+  if (listings?.data == null || user?.data == null) {
     return notFound();
   }
 
