@@ -4,6 +4,7 @@ import CountrySelect from "@/components/ui/country-select";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,12 +15,14 @@ import Loader from "@/components/ui/loader";
 import { SignUp } from "@/services/auth.services";
 import { formatError } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CircleAlert, Eye, EyeIcon, EyeOff } from "lucide-react";
+import { CircleAlert, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 const formSchema = z.object({
   first_name: z.string().min(1, {
@@ -31,23 +34,9 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Provide a valid email",
   }),
-  country: z
-    .object({
-      country_code: z
-        .string()
-        .min(1, { message: "Provide a valid country code" })
-        .max(2, { message: "Country code must be 2 characters" }),
-      calling_code: z
-        .string()
-        .min(1, { message: "Provide a valid calling code" })
-        .max(4, { message: "Calling code must be up to 4 characters" }),
-    })
-    .refine((data) => data.country_code && data.calling_code, {
-      message: "Provide a valid country",
-    }),
-  phone_number: z.string().min(1, {
-    message: "Provide a valid phone number",
-  }),
+  phone_number: z
+    .string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   password: z.string().min(8, {
     message: "Password should be at least 8 characters",
   }),
@@ -65,10 +54,6 @@ function SignUpForm() {
       first_name: "",
       last_name: "",
       email: "",
-      country: {
-        country_code: "",
-        calling_code: "",
-      },
       phone_number: "",
       password: "",
     },
@@ -83,8 +68,6 @@ function SignUpForm() {
       email: values.email,
       password: values.password,
       phone_number: values.phone_number,
-      country_code: values.country.country_code,
-      calling_code: values.country.calling_code,
     };
     await SignUp(payload)
       .then(() => {
@@ -173,35 +156,22 @@ function SignUpForm() {
             />
             <FormField
               control={form.control}
-              name="country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-primary">Country</FormLabel>
-                  <FormControl>
-                    <CountrySelect
-                      onChange={(selectedOption) => {
-                        field.onChange(selectedOption);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="phone_number"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-primary">Phone Number</FormLabel>
                   <FormControl>
-                    <Input
-                      type="text"
+                    <PhoneInput
                       {...field}
+                      value={field.value}
+                      onChange={field.onChange}
                       autoFocus
                       disabled={isSubmittingForm}
                     />
                   </FormControl>
+                  <FormDescription>
+                    Phone numbers should start with your country code.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -219,7 +189,7 @@ function SignUpForm() {
                         {...field}
                         autoFocus
                         disabled={isSubmittingForm}
-                        className="pr-10" // Add padding to the right for the button
+                        className="pr-10"
                       />
                       <button
                         type="button"

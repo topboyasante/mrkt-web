@@ -8,8 +8,6 @@ type SignUpParams = {
   email: string;
   password: string;
   phone_number: string;
-  country_code: string;
-  calling_code: string;
 };
 
 async function SignUp(values: SignUpParams) {

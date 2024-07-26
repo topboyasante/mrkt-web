@@ -10,10 +10,7 @@ import { countries } from "@/constant/country-codes";
 import Flag from "react-world-flags";
 
 interface CountrySelectProps {
-  onChange: (selectedOption: {
-    country_code: string;
-    calling_code: string;
-  }) => void;
+  onChange: (selectedOption: string) => void;
 }
 
 function CountrySelect({ onChange }: CountrySelectProps) {
@@ -23,10 +20,7 @@ function CountrySelect({ onChange }: CountrySelectProps) {
     );
 
     if (selectedCountry) {
-      onChange({
-        country_code: selectedCountry.value,
-        calling_code: selectedCountry.callingCode,
-      });
+      onChange(selectedCountry.value);
     }
   };
 

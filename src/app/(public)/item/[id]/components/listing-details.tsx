@@ -147,9 +147,7 @@ function ListingDetails({ listing }: Props) {
                   </Button>
                 </Link>
                 <Link
-                  href={`https://wa.me/${
-                    user?.calling_code + user.phone_number
-                  }?text=I'm%20interested%20in%20your%20${title}`}
+                  href={`https://wa.me/${user.phone_number}?text=I'm%20interested%20in%20your%20${title}`}
                   target="_blank"
                 >
                   <Button className="w-full gap-2">

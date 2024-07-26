@@ -19,7 +19,6 @@ interface IUsrDataRes {
   first_name: string;
   last_name: string;
   phone_number: string;
-  calling_code: string;
   id: string;
 }
 
@@ -57,7 +56,6 @@ export interface UserResponse {
     first_name: string;
     last_name: string;
     email: string;
-    calling_code: string;
     phone_number: string;
     created_at: string;
     updated_at: string;
