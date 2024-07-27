@@ -99,7 +99,7 @@ function UpdateListingForm({ ...props }: FormProps) {
         formData,
         session.data?.user.access_token as string
       );
-      toast("Listing created successfully!");
+      toast("Listing updated successfully!");
       router.push("/");
     } catch (error) {
       toast("Error creating listing.");
