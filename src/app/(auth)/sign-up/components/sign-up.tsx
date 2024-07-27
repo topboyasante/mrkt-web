@@ -125,12 +125,7 @@ function SignUpForm() {
                 <FormItem>
                   <FormLabel className="text-primary">Last Name</FormLabel>
                   <FormControl>
-                    <Input
-                      type="text"
-                      {...field}
-                      autoFocus
-                      disabled={isSubmittingForm}
-                    />
+                    <Input type="text" {...field} disabled={isSubmittingForm} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,7 +141,6 @@ function SignUpForm() {
                     <Input
                       type="email"
                       {...field}
-                      autoFocus
                       disabled={isSubmittingForm}
                     />
                   </FormControl>
@@ -165,7 +159,6 @@ function SignUpForm() {
                       {...field}
                       value={field.value}
                       onChange={field.onChange}
-                      autoFocus
                       disabled={isSubmittingForm}
                     />
                   </FormControl>
@@ -187,7 +180,6 @@ function SignUpForm() {
                       <Input
                         type={showPassword ? "text" : "password"}
                         {...field}
-                        autoFocus
                         disabled={isSubmittingForm}
                         className="pr-10"
                       />

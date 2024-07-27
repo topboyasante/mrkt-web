@@ -103,7 +103,6 @@ export default function ResetPasswordForm({ reset_email }: Props) {
                   <Input
                     type="password"
                     {...field}
-                    autoFocus
                     disabled={isSubmittingForm}
                   />
                 </FormControl>

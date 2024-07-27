@@ -106,9 +106,8 @@ function SignInForm() {
                       <Input
                         type={showPassword ? "text" : "password"}
                         {...field}
-                        autoFocus
                         disabled={isSubmittingForm}
-                        className="pr-10" // Add padding to the right for the button
+                        className="pr-10"
                       />
                       <button
                         type="button"
