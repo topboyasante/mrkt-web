@@ -150,7 +150,7 @@ function ListingDetails({ listing }: Props) {
                   href={`https://wa.me/${user.phone_number}?text=I'm%20interested%20in%20your%20${title}`}
                   target="_blank"
                 >
-                  <Button className="w-full gap-2">
+                  <Button className="w-full gap-2" variant={"secondary"}>
                     <SiWhatsapp /> Send a Message
                   </Button>
                 </Link>
