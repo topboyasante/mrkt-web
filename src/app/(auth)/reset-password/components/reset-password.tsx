@@ -77,11 +77,11 @@ export default function ResetPasswordForm({ reset_email }: Props) {
 
   async function handleResendActivationCode(email: string) {
     setOverlay(true);
-    await ResendActivationCode(email)
+    await ResendActivationCode(email,"forgot_password")
       .then(() => {
         setCanSendCode(false);
         setOverlay(false);
-        toast.success("We've sent the code to your email.");
+        toast.success("We've sent the code to your email. Kindly check your spam!");
         setTimeout(() => setCanSendCode(true), 60000);
       })
       .catch((err) => {

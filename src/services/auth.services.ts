@@ -50,13 +50,13 @@ async function ActivateAccount(email: string, auth_token: number) {
     });
 }
 
-async function ResendActivationCode(email: string) {
+async function ResendActivationCode(email: string, reset_type: string) {
   await fetch(`${process.env.API_URL}/auth/resend-token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(email),
+    body: JSON.stringify({ email, reset_type }),
   })
     .then(async (res) => {
       if (!res.ok) {

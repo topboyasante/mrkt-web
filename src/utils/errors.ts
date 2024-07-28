@@ -4,7 +4,7 @@ function formatError(input: string): string {
     "user does not exist": "No user exists with the provided credentials.",
     "no user exists with the provided credentials":
       "No user exists with the provided credentials.",
-    "account is not activated": "Please activate your account.",
+    "account has not been activated": "Please activate your account.",
     "invalid email": "The email you provided is invalid.",
     "user with provided email exists": "A user with the provided email exists.",
     "user with provided phone_number exists":
