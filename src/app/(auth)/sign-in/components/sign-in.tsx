@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -91,6 +92,7 @@ function SignInForm() {
                       disabled={isSubmittingForm}
                     />
                   </FormControl>
+                  <FormDescription>We&apos;ll send an email if your account is not active.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
