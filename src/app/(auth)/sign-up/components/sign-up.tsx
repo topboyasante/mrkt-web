@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import CountrySelect from "@/components/ui/country-select";
 import {
   Form,
   FormControl,
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Loader from "@/components/ui/loader";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { SignUp } from "@/services/auth.services";
 import { formatError } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,9 +20,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { isValidPhoneNumber } from "react-phone-number-input";
-import { PhoneInput } from "@/components/ui/phone-input";
+import { z } from "zod";
 
 const formSchema = z.object({
   first_name: z.string().min(1, {
@@ -144,6 +143,9 @@ function SignUpForm() {
                       disabled={isSubmittingForm}
                     />
                   </FormControl>
+                  <FormDescription>
+                    You&apos;ll need to activate your account with this email.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
