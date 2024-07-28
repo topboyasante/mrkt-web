@@ -56,7 +56,7 @@ async function ResendActivationCode(email: string) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify(email),
   })
     .then(async (res) => {
       if (!res.ok) {
